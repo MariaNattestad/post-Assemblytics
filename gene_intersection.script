@@ -1,0 +1,5 @@
+VARIANTS=/seq/schatz/mnattest/plasmodium_falciparum/Assemblytics_2bp_min_variant/Plasmodium_falciparum.April6.Assemblytics_structural_variants.bed
+GENES=/seq/schatz/mnattest/plasmodium_falciparum/Assemblytics_2bp_min_variant/gene_intersection/PlasmoDB-13.0_Pfalciparum3D7.gff
+OUTPUT_PREFIX=/seq/schatz/mnattest/plasmodium_falciparum/Assemblytics_2bp_min_variant/gene_intersection/Plasmodium_falciparum.April6.Assemblytics_structural_variants
+
+bedtools intersect -loj -a <(tail -n +2 $VARIANTS) -b <(awk 'NF>1 && $3!="chromosome"' $GENES) > $OUTPUT_PREFIX.intersected_with_annotation.bed
