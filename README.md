@@ -8,6 +8,6 @@ First use Assemblytics at qb.cshl.edu/assemblytics to call variants, download th
 Analyses available so far:
 1. Basic intersection with genes (needs gff annotation file) using bedtools
 2. Homopolymer analysis of insertions (needs the query fasta file, the one used in nucmer alignment)
-	- this could be adapted to extract deletions as well, or any other features
-	- the count_homopolymers.py script looks for homopolymers in a file containing the inserted sequence as well as the flanking sequences. 
+	* this could be adapted to extract deletions as well, or any other features
+	* the count_homopolymers.py script looks for homopolymers in a file containing the inserted sequence as well as the flanking sequences. 
 3. Alu element analysis using RepeatMasker for intersecting deletions, and then extracting insertions from the query fasta file so we can BLAST them. This extraction from the query/assembly can also be done using bedtools, which may be faster as used in the homopolymer analysis. 
