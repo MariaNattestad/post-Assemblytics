@@ -1,8 +1,10 @@
+# Set file paths
 VARIANTS=/seq/schatz/mnattest/plasmodium_falciparum/Assemblytics_2bp_min_variant/Plasmodium_falciparum.April6.Assemblytics_structural_variants.bed
 OUTPUT_PREFIX=/seq/schatz/mnattest/plasmodium_falciparum/Assemblytics_2bp_min_variant/homopolymer_expansions/Plasmodium_falciparum.April6.Assemblytics_structural_variants
 ASSEMBLY_FASTA=/seq/schatz/mnattest/plasmodium_falciparum/polished_assembly.fasta
 
 
+# Run analysis
 cat $VARIANTS | grep "Insertion" | awk '$5<10' > $OUTPUT_PREFIX.insertions_below_10bp.bed
 cat $OUTPUT_PREFIX.insertions_below_10bp.bed | awk -F '[-,:\t]' '{print $10,$11,$12,$4,$5,$6,$0}' OFS='\t' > $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.bed
 cat $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.bed | awk '{$2=$2-10;$3=$3+10;print}' OFS='\t' > $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.bed
@@ -10,6 +12,7 @@ cat $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.bed | awk '{$2=$2-
 bedtools getfasta -tab -name -bed $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.bed -fi $ASSEMBLY_FASTA -fo $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.sequences.tab
 cat $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.sequences.tab | awk 'BEGIN{print "name\tleft\tinsertion\tright"}{print $1,substr($2,0,10),substr($2,11,length($2)-20),substr($2,length($2)-10+1,length($2))}' OFS='\t' > $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.sequences.left_insertion_right_sequences.tab
 
+# place count_homopolymers.py in your PATH
 count_homopolymers.py -file $OUTPUT_PREFIX.insertions_below_10bp.assembly_coordinates.slop10.sequences.left_insertion_right_sequences.tab -out $OUTPUT_PREFIX.insertions_below_10bp.homopolymers.by.variant_name.tab > $OUTPUT_PREFIX.insertions_below_10bp.homopolymers.summary
 
 HEADER="variant_name reference ref_start ref_stop size strand type ref_gap_size query_gap_size query_coordinates method left_of_insertion insertion right_of_insertion polymer"
